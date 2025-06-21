@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'perusahaan') {
+if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'perusahaan' || $_SESSION['user_status_verifikasi'] !== 'terverifikasi') {
     header("Location: ../auth/login.php");
     exit();
 }

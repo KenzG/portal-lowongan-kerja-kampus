@@ -26,9 +26,15 @@ session_start();
                     </li>
                     
                     <?php if ($_SESSION['user_role'] == 'perusahaan'): ?>
+                       <?php if ($_SESSION['user_status_verifikasi'] == 'terverifikasi'): ?>
                         <li class="nav-item">
                             <a class="nav-link" href="/portal-lowongan-kerja-kampus/lowongan/tambah.php">Post Lowongan</a>
                         </li>
+                        <?php else: ?>
+                            <li class="nav-item">
+                                <span class="nav-link disabled text-warning">Akun Menunggu Verifikasi</span>
+                            </li>
+                        <?php endif; ?>
                     <?php endif; ?>
 
                     <li class="nav-item">
