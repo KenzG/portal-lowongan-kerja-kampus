@@ -1,6 +1,14 @@
 <?php
+session_start(); // [BARIS BARU] - Wajib untuk mengakses $_SESSION
+
 // 1. Sertakan file koneksi
 require '../koneksi.php';
+
+// [OPSIONAL TAPI DIANJURKAN] - Tambahkan proteksi yang sama seperti di halaman form
+if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'perusahaan' || $_SESSION['user_status_verifikasi'] !== 'terverifikasi') {
+    header("Location: ../auth/login.php");
+    exit();
+}
 
 // 2. Periksa apakah data dikirim melalui metode POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -10,14 +18,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama_perusahaan = $_POST['nama_perusahaan'];
     $lokasi = $_POST['lokasi'];
     $deskripsi = $_POST['deskripsi'];
+    $id_perusahaan = $_SESSION['user_id']; // [BARIS BARU] - Ambil ID perusahaan dari session
 
     // 4. Siapkan query SQL untuk INSERT data (Gunakan Prepared Statements!)
-    $query = "INSERT INTO lowongan (judul, nama_perusahaan, lokasi, deskripsi) 
-              VALUES (:judul, :nama_perusahaan, :lokasi, :deskripsi)";
+    // [KUERI DIUBAH] - Menambahkan kolom `id_perusahaan` dan placeholder-nya
+    $query = "INSERT INTO lowongan (id_perusahaan, judul, nama_perusahaan, lokasi, deskripsi) 
+              VALUES (:id_perusahaan, :judul, :nama_perusahaan, :lokasi, :deskripsi)";
     
     $statement = $pdo->prepare($query);
 
     // 5. Ikat parameter dengan variabel
+    $statement->bindParam(':id_perusahaan', $id_perusahaan); // [BARIS BARU] - Ikat parameter baru
     $statement->bindParam(':judul', $judul);
     $statement->bindParam(':nama_perusahaan', $nama_perusahaan);
     $statement->bindParam(':lokasi', $lokasi);

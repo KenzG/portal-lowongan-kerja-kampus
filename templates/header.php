@@ -22,20 +22,35 @@ session_start();
 
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Selamat datang, <?= htmlspecialchars($_SESSION['user_email']) ?></a>
+                        <span class="nav-link">Selamat datang, <?= htmlspecialchars($_SESSION['user_email']) ?></span>
                     </li>
                     
-                    <?php if ($_SESSION['user_role'] == 'perusahaan'): ?>
-                       <?php if ($_SESSION['user_status_verifikasi'] == 'terverifikasi'): ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/portal-lowongan-kerja-kampus/lowongan/tambah.php">Post Lowongan</a>
-                        </li>
+                    <?php 
+                    // Mulai satu rangkaian pengecekan role
+                    if ($_SESSION['user_role'] == 'perusahaan'): ?>
+                        <?php if ($_SESSION['user_status_verifikasi'] == 'terverifikasi'): ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/portal-lowongan-kerja-kampus/dashboard/">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/portal-lowongan-kerja-kampus/lowongan/tambah.php">Post Lowongan</a>
+                            </li>
                         <?php else: ?>
                             <li class="nav-item">
                                 <span class="nav-link disabled text-warning">Akun Menunggu Verifikasi</span>
                             </li>
                         <?php endif; ?>
-                    <?php endif; ?>
+                    
+                    <?php elseif ($_SESSION['user_role'] == 'mahasiswa'): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/portal-lowongan-kerja-kampus/riwayat_lamaran.php">Riwayat Lamaran</a>
+                        </li>
+
+                    <?php elseif ($_SESSION['user_role'] == 'admin'): ?>
+                        <li class="nav-item">
+                            <a class="nav-link fw-bold text-warning" href="/portal-lowongan-kerja-kampus/admin/">Admin Dashboard</a>
+                        </li>
+                    <?php endif; // Penutup untuk rangkaian pengecekan role ?>
 
                     <li class="nav-item">
                         <a class="nav-link" href="/portal-lowongan-kerja-kampus/auth/logout.php">Logout</a>
@@ -48,7 +63,7 @@ session_start();
                     <li class="nav-item">
                         <a class="nav-link" href="/portal-lowongan-kerja-kampus/auth/register.php">Register</a>
                     </li>
-                <?php endif; ?>
+                <?php endif; // Penutup untuk pengecekan isset($_SESSION['user_id']) ?>
 
             </ul>
         </div>
